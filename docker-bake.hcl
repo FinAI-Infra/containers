@@ -2,6 +2,12 @@ group "default" {
   targets = ["runpod_260", "runpod_280"]
 }
 
+target "actions-runner" {
+  context    = "actions-runner"
+  dockerfile = "Dockerfile"
+  tags = ["fengheai/actions-runner:latest"]
+}
+
 target "github-token-manager" {
   context    = "github-token-manager"
   dockerfile = "Dockerfile"

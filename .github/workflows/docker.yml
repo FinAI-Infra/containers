@@ -3,6 +3,7 @@ name: Docker Image Build and Release
 on:
   push:
     paths:
+      - actions-runner/**
       - github-token-manager/**
       - runpod/**
 
@@ -12,6 +13,7 @@ jobs:
     strategy:
       matrix:
         context:
+          - actions-runner
           - github-token-manager
           - runpod_260
           - runpod_280
@@ -38,18 +40,40 @@ jobs:
           echo "short_commit=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
           echo -n "check_dir=" >> $GITHUB_OUTPUT
           docker buildx bake -f docker-bake.hcl --print ${{ matrix.context }} | jq -r '.target."${{ matrix.context }}".context' >> $GITHUB_OUTPUT
+          echo -n "image_tag=" >> $GITHUB_OUTPUT
+          docker buildx bake -f docker-bake.hcl --print ${{ matrix.context }} | jq -r '.target."${{ matrix.context }}".tags[0]' >> $GITHUB_OUTPUT
 
       - name: Check changes
-        uses: dorny/paths-filter@v3
         id: changes
+        uses: dorny/paths-filter@v3
         with:
           filters: |
             changed:
             - '${{ steps.build_vars.outputs.check_dir }}/**'
 
-      - name: Build and push
+      - name: Build and load
+        id: build
         uses: docker/bake-action@v6
         if: steps.changes.outputs.changed == 'true'
+        env:
+          DOCKER_BUILD_RECORD_RETENTION_DAYS: 3
+        with:
+          load: true
+          targets: ${{ matrix.context }}
+
+      - name: Scan for vulnerabilities
+        id: scan
+        uses: crazy-max/ghaction-container-scan@v3
+        if: steps.build.outcome == 'success'
+        with:
+          image: ${{ steps.build_vars.outputs.image_tag }}
+          dockerfile: ./Dockerfile
+          severity_threshold: HIGH
+          annotations: true
+
+      - name: Build and push
+        uses: docker/bake-action@v6
+        if: steps.scan.outcome == 'success'
         env:
           DOCKER_BUILD_RECORD_RETENTION_DAYS: 3
         with:

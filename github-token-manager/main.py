@@ -22,7 +22,8 @@ AZURE_SECRET_NAME = os.getenv("AZURE_SECRET_NAME", "github-access-token")
 
 logging.basicConfig(
     level=getattr(logging, LOG_LEVEL.upper(), logging.INFO),
-    format="[%(levelname)s] [%(name)s] %(asctime)s %(message)s",
+    format="[%(name)s] [%(levelname)s] %(asctime)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
 )
 logger = logging.getLogger(__name__)
 
