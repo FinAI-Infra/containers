@@ -82,12 +82,12 @@ def get_installation_token():
     data = generate_access_token()
     with open(TOKEN_CACHE_FILE, "w") as f:
         json.dump(data, f)
-    save_token(data["token"])
+    save_token(data)
 
     return data["token"]
 
 
-def save_token(token: str):
+def save_token(data: dict):
     """
     Save GitHub access token to Azure Key Vault securely
 
@@ -98,7 +98,12 @@ def save_token(token: str):
     logger.debug("Saving access token to Azure Key Vault")
     credential = DefaultAzureCredential()
     client = SecretClient(vault_url=AZURE_VAULT_URL, credential=credential)
-    client.set_secret(AZURE_SECRET_NAME, token)
+    client.set_secret(
+        AZURE_SECRET_NAME,
+        data["token"],
+        content_type="text/plain",
+        expires_on=datetime.strptime(data["expires_at"], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc),
+    )
     logger.info("Token successfully saved to Azure Key Vault")
 
 

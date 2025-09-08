@@ -8,6 +8,12 @@ target "actions-runner" {
   tags = ["fengheai/actions-runner:latest"]
 }
 
+target "git-tools" {
+  context    = "git-tools"
+  dockerfile = "Dockerfile"
+  tags = ["fengheai/git-tools:latest"]
+}
+
 target "github-token-manager" {
   context    = "github-token-manager"
   dockerfile = "Dockerfile"
