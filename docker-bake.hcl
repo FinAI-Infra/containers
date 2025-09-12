@@ -1,11 +1,17 @@
 group "default" {
-  targets = ["runpod_260", "runpod_280"]
+  targets = ["actions-runner"]
 }
 
 target "actions-runner" {
   context    = "actions-runner"
   dockerfile = "Dockerfile"
   tags = ["fengheai/actions-runner:latest"]
+}
+
+target "compass-runtime" {
+  context    = "compass-runtime"
+  dockerfile = "Dockerfile"
+  tags = ["fengheai/compass-runtime:demo"]
 }
 
 target "git-tools" {
