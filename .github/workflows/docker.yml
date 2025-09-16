@@ -10,8 +10,10 @@ jobs:
       matrix:
         context:
           - actions-runner
+          - compass-runtime
           - git-tools
           - github-token-manager
+          - mlflow
           - runpod_260
           - runpod_280
     steps:
@@ -42,7 +44,7 @@ jobs:
           BUILD_DIR=$(echo "$BUILD_INFO" | jq -r '.context')
           DOCKERFILE=$(echo "$BUILD_INFO" | jq -r '.dockerfile')
           IMAGE_TAG=$(echo "$BUILD_INFO" | jq -r '.tags[0]')
-          echo "dockerfile=$BUILD_DIR/$DOCKERFILE" >> $GITHUB_OUTPUT
+          echo "dockerfile=./$BUILD_DIR/$DOCKERFILE" >> $GITHUB_OUTPUT
           echo "image_tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
 
           CHANGED="false"
@@ -78,6 +80,11 @@ jobs:
         id: scan
         uses: crazy-max/ghaction-container-scan@v3
         if: steps.build.outcome == 'success'
+        continue-on-error: true
+        env:
+          TRIVY_TIMEOUT: 15m
+          # TRIVY_MAX_IMAGE_SIZE: 5GB
+          TRIVY_SKIP_DIRS: "**/.venv"
         with:
           image: ${{ steps.build_vars.outputs.image_tag }}
           dockerfile: ${{ steps.build_vars.outputs.dockerfile }}

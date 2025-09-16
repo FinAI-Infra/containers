@@ -1,11 +1,17 @@
 group "default" {
-  targets = ["runpod_260", "runpod_280"]
+  targets = ["actions-runner"]
 }
 
 target "actions-runner" {
   context    = "actions-runner"
   dockerfile = "Dockerfile"
   tags = ["fengheai/actions-runner:latest"]
+}
+
+target "compass-runtime" {
+  context    = "compass-runtime"
+  dockerfile = "Dockerfile"
+  tags = ["fengheai/compass-runtime"]
 }
 
 target "git-tools" {
@@ -18,6 +24,12 @@ target "github-token-manager" {
   context    = "github-token-manager"
   dockerfile = "Dockerfile"
   tags = ["fengheai/github-token-manager:latest"]
+}
+
+target "mlflow" {
+  context    = "mlflow"
+  dockerfile = "Dockerfile"
+  tags = ["fengheai/mlflow:latest"]
 }
 
 target "runpod_260" {
