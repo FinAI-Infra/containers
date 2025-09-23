@@ -13,6 +13,8 @@ RUN set -e; \
     sudo apt-get update; \
     sudo apt-get upgrade -y; \
     sudo apt-get install -y --no-install-recommends build-essential; \
+    curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash; \
+    sudo apt-get purge -y --auto-remove build-essential; \
     sudo sed -i 's/\(archive\|security\)\.ubuntu\.com/azure.archive.ubuntu.com/g' /etc/apt/sources.list; \
     sudo apt-get clean; \
     sudo rm -rf /var/lib/apt/lists/*;
