@@ -14,8 +14,6 @@ jobs:
           - git-tools
           - github-token-manager
           - mlflow
-          - runpod_260
-          - runpod_280
     steps:
       - name: Checkout
         uses: actions/checkout@v5

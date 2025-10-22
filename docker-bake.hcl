@@ -31,21 +31,3 @@ target "mlflow" {
   dockerfile = "Dockerfile"
   tags = ["fengheai/mlflow:latest"]
 }
-
-target "runpod_260" {
-  context    = "runpod"
-  dockerfile = "Dockerfile"
-  args = {
-    PYTORCH_VERSION = "2.6.0"
-  }
-  tags = ["fengheai/runpod:2.6.0"]
-}
-
-target "runpod_280" {
-  context    = "runpod"
-  dockerfile = "Dockerfile"
-  args = {
-    PYTORCH_VERSION = "2.8.0"
-  }
-  tags = ["fengheai/runpod:2.8.0"]
-}
