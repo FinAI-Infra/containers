@@ -5,7 +5,7 @@ group "default" {
 target "actions-runner" {
   context    = "actions-runner"
   dockerfile = "Dockerfile"
-  tags = ["fengheai/actions-runner:latest"]
+  tags = ["fengheai/actions-runner"]
 }
 
 target "compass-runtime" {
@@ -17,17 +17,17 @@ target "compass-runtime" {
 target "git-tools" {
   context    = "git-tools"
   dockerfile = "Dockerfile"
-  tags = ["fengheai/git-tools:latest"]
+  tags = ["fengheai/git-tools"]
 }
 
 target "github-token-manager" {
   context    = "github-token-manager"
   dockerfile = "Dockerfile"
-  tags = ["fengheai/github-token-manager:latest"]
+  tags = ["fengheai/github-token-manager"]
 }
 
 target "mlflow" {
   context    = "mlflow"
   dockerfile = "Dockerfile"
-  tags = ["fengheai/mlflow:latest"]
+  tags = ["fengheai/mlflow"]
 }

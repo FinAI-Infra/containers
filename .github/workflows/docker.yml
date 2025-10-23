@@ -2,6 +2,12 @@ name: Docker Image Build and Release
 
 on:
   push:
+    paths:
+      - actions-runner/**
+      - compass-runtime/**
+      - git-tools/**
+      - github-token-manager/**
+      - mlflow/**
 
 jobs:
   bake:
@@ -35,15 +41,13 @@ jobs:
       - name: Set build variables
         id: build_vars
         run: |
-          echo "build_date=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> $GITHUB_OUTPUT
-          echo "short_commit=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
           echo -n "check_dir=" >> $GITHUB_OUTPUT
           BUILD_INFO=$(docker buildx bake -f docker-bake.hcl --print ${{ matrix.context }} | jq -c '.target."${{ matrix.context }}"')
           BUILD_DIR=$(echo "$BUILD_INFO" | jq -r '.context')
           DOCKERFILE=$(echo "$BUILD_INFO" | jq -r '.dockerfile')
-          IMAGE_TAG=$(echo "$BUILD_INFO" | jq -r '.tags[0]')
+          IMAGE_NAME=$(echo "$BUILD_INFO" | jq -r '.tags[0]')
           echo "dockerfile=./$BUILD_DIR/$DOCKERFILE" >> $GITHUB_OUTPUT
-          echo "image_tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
+          echo "image_name=$IMAGE_NAME" >> $GITHUB_OUTPUT
 
           CHANGED="false"
           if [ "${{ github.event_name }}" = "push" ]; then
@@ -60,6 +64,14 @@ jobs:
           fi
           echo "changed=$CHANGED" >> $GITHUB_OUTPUT
 
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ steps.build_vars.outputs.image_name }}
+          tags: |
+            type=raw,value=latest
+
       - name: Build and push
         id: build
         uses: docker/bake-action@v6
@@ -67,12 +79,11 @@ jobs:
         env:
           DOCKER_BUILD_RECORD_RETENTION_DAYS: 3
         with:
+          files: |
+            ./docker-bake.hcl
+            cwd://${{ steps.meta.outputs.bake-file }}
           push: true
           targets: ${{ matrix.context }}
-          set: |
-            *.args.GITHUB_SHA=${{ github.sha }}
-            *.args.GITHUB_SHA_SHORT=${{ steps.build_vars.outputs.short_commit }}
-            *.args.BUILD_DATE=${{ steps.build_vars.outputs.build_date }}
 
       - name: Scan for vulnerabilities
         id: scan
@@ -84,7 +95,7 @@ jobs:
           # TRIVY_MAX_IMAGE_SIZE: 5GB
           TRIVY_SKIP_DIRS: "**/.venv"
         with:
-          image: ${{ steps.build_vars.outputs.image_tag }}
+          image: ${{ fromJSON(steps.meta.outputs.json).tags[0] }}
           dockerfile: ${{ steps.build_vars.outputs.dockerfile }}
           severity_threshold: HIGH
           annotations: true
