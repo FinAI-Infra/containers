@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - actions-runner/**
+      - azcopy/**
       - compass-runtime/**
       - git-tools/**
       - github-token-manager/**
@@ -16,6 +17,7 @@ jobs:
       matrix:
         context:
           - actions-runner
+          - azcopy
           - compass-runtime
           - git-tools
           - github-token-manager
@@ -93,7 +95,7 @@ jobs:
         env:
           TRIVY_TIMEOUT: 15m
           # TRIVY_MAX_IMAGE_SIZE: 5GB
-          TRIVY_SKIP_DIRS: "**/.venv"
+          TRIVY_SKIP_DIRS: "**/.venv,**/node_modules"
         with:
           image: ${{ fromJSON(steps.meta.outputs.json).tags[0] }}
           dockerfile: ${{ steps.build_vars.outputs.dockerfile }}

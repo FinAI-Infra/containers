@@ -24,16 +24,8 @@ RUN set -e; \
 ARG PYTHON_VERSION=3.12
 FROM python:${PYTHON_VERSION}-slim-bookworm
 
-ARG GITHUB_SHA
-ARG GITHUB_SHA_SHORT
-ARG BUILD_DATE
 ARG APP_USER=compass
 ARG APP_DIR=/app
-
-LABEL org.opencontainers.image.revision=$GITHUB_SHA \
-      org.opencontainers.image.created=$BUILD_DATE \
-      org.opencontainers.image.version=$GITHUB_SHA_SHORT \
-      org.opencontainers.image.source="https://github.com/FinAI-Infra/containers/tree/main/compass-runtime"
 
 ENV TZ=Asia/Singapore
 ENV RUNTIME_VERSION=$GITHUB_SHA_SHORT
@@ -44,8 +36,11 @@ RUN set -e; \
     apt-get update; \
     apt-get upgrade -y; \
     apt-get install -y --no-install-recommends tzdata git make curl rsync; \
+    pip install --upgrade pip; \
+    pip cache purge; \
     ln -snf /usr/share/zoneinfo/$TZ /etc/localtime; \
     echo $TZ > /etc/timezone; \
+    sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b /usr/local/bin; \
     apt-get clean; \
     rm -rf /var/lib/apt/lists/*; \
     useradd --create-home $APP_USER; \

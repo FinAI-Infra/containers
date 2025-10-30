@@ -22,21 +22,15 @@ RUN set -e; \
 ARG PYTHON_VERSION=3.13
 FROM python:${PYTHON_VERSION}-alpine
 
-ARG GITHUB_SHA
-ARG GITHUB_SHA_SHORT
-ARG BUILD_DATE
 ARG APP_USER=mlflow
 ARG APP_DIR=/app
-
-LABEL org.opencontainers.image.revision=$GITHUB_SHA \
-      org.opencontainers.image.created=$BUILD_DATE \
-      org.opencontainers.image.version=$GITHUB_SHA_SHORT \
-      org.opencontainers.image.source="https://github.com/FinAI-Infra/containers/tree/main/mlflow"
 
 RUN set -e; \
     apk update; \
     apk upgrade; \
     apk cache clean; \
+    pip install --upgrade pip; \
+    pip cache purge; \
     adduser -D -h $APP_DIR $APP_USER;
 
 ENV VIRTUAL_ENV="${APP_DIR}/.venv"

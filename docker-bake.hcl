@@ -8,6 +8,12 @@ target "actions-runner" {
   tags = ["fengheai/actions-runner"]
 }
 
+target "azcopy" {
+  context    = "azcopy"
+  dockerfile = "Dockerfile"
+  tags = ["fengheai/azcopy"]
+}
+
 target "compass-runtime" {
   context    = "compass-runtime"
   dockerfile = "Dockerfile"
