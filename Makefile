@@ -30,7 +30,7 @@ dryrun:
 	docker run -it --rm \
 		-v $HOME/.cache/root:/root/.cache \
 		-v ./requirements.txt:/requirements.txt \
-		python:3.12-slim-bookworm \
+		python:3.13-slim-bookworm \
 		bash -c " \
 			apt-get update && \
 			apt-get install -y --no-install-recommends build-essential && \

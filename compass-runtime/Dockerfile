@@ -40,7 +40,7 @@ RUN set -e; \
     pip cache purge; \
     ln -snf /usr/share/zoneinfo/$TZ /etc/localtime; \
     echo $TZ > /etc/timezone; \
-    sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b /usr/local/bin; \
+    sh -c "$(curl -sL https://taskfile.dev/install.sh)" -- -d -b /usr/local/bin; \
     apt-get clean; \
     rm -rf /var/lib/apt/lists/*; \
     useradd --create-home $APP_USER; \
