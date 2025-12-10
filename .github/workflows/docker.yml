@@ -14,7 +14,7 @@ on:
 jobs:
   bake:
     runs-on:
-      group: ArcCI
+      group: Arc
     strategy:
       matrix:
         context:
@@ -89,7 +89,6 @@ jobs:
             ASSET_NAME=$(echo $ASSET_DATA | jq -r '.name')
             ASSET_URL=$(echo $ASSET_DATA | jq -r '.url')
             mkdir -p compass-runtime/packages
-            echo fenghe_nn >> compass-runtime/requirements.txt
             curl -sLo "compass-runtime/packages/$ASSET_NAME" -H "Authorization: Bearer $GITHUB_TOKEN" -H "Accept: application/octet-stream" "$ASSET_URL"
           fi
 
