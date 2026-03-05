@@ -1,11 +1,5 @@
 group "default" {
-  targets = ["actions-runner"]
-}
-
-target "actions-runner" {
-  context    = "actions-runner"
-  dockerfile = "Dockerfile"
-  tags       = ["fengheai/actions-runner"]
+  targets = ["azure-cli"]
 }
 
 target "azure-cli" {

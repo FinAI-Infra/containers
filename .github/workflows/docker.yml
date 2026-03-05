@@ -3,7 +3,6 @@ name: Docker Image Build and Release
 on:
   push:
     paths:
-      - actions-runner/**
       - azure-cli/**
       - compass-runtime/**
       - git-tools/**
