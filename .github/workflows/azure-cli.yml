@@ -1,0 +1,14 @@
+name: Build Azure CLI
+
+on:
+  push:
+    paths:
+      - azure-cli/**
+
+jobs:
+  docker:
+    uses: ./.github/workflows/docker-build.yml
+    with:
+      build_context: azure-cli
+      image_name: fengheai/azure-cli
+    secrets: inherit

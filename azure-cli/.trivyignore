@@ -1,0 +1,10 @@
+# azcopy upstream dependency, no patched version available yet
+CVE-2026-34986
+
+# otel sdk bundled in azcopy binary, not used in our execution path
+CVE-2026-39883
+
+# Go stdlib vulnerabilities inside azcopy binary
+# risk accepted because azcopy is used only for trusted blob transfer
+CVE-2026-32280
+CVE-2026-32282

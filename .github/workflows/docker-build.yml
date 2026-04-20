@@ -46,8 +46,6 @@ jobs:
 
       - name: Set build variables
         id: build_vars
-        env:
-          GITHUB_TOKEN: ${{ steps.auth.outputs.access-token }}
         run: |
           TRIVY_IGNOREFILE=""
           if [ -f "${{ inputs.build_context }}/.trivyignore" ]; then

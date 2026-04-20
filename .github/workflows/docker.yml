@@ -3,7 +3,6 @@ name: Docker Image Build and Release
 on:
   push:
     paths:
-      - azure-cli/**
       - compass-runtime/**
       - git-tools/**
       - github-token-manager/**
@@ -18,7 +17,6 @@ jobs:
       matrix:
         context:
           - actions-runner
-          - azure-cli
           - compass-runtime
           - git-tools
           - github-token-manager
