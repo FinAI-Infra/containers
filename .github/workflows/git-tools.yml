@@ -1,0 +1,14 @@
+name: Build Git Tools
+
+on:
+  push:
+    paths:
+      - git-tools/**
+
+jobs:
+  docker:
+    uses: ./.github/workflows/docker-build.yml
+    with:
+      build_context: git-tools
+      image_name: fengheai/git-tools
+    secrets: inherit

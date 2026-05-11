@@ -2,7 +2,7 @@
 
 set -e
 
-TOKEN_CACHE_FILE="${TOKEN_CACHE_FILE:-~/.github-token}"
+TOKEN_CACHE_FILE="${TOKEN_CACHE_FILE:-$HOME/.github-token}"
 
 print_creds() {
     skip_cache="$1"
@@ -11,6 +11,7 @@ print_creds() {
     echo "username=${GITHUB_USER:-x-access-token}"
     echo "password=${GITHUB_TOKEN}"
     if [ -z "$skip_cache" ]; then
+        mkdir -p "$(dirname "$TOKEN_CACHE_FILE")"
         echo -n "$GITHUB_TOKEN" > "$TOKEN_CACHE_FILE"
     fi
 }

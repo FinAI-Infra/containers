@@ -4,7 +4,6 @@ on:
   push:
     paths:
       - compass-runtime/**
-      - git-tools/**
       - github-token-manager/**
       - mlflow/**
       - query-exporter/**
@@ -18,7 +17,6 @@ jobs:
         context:
           - actions-runner
           - compass-runtime
-          - git-tools
           - github-token-manager
           - mlflow
           - query-exporter
