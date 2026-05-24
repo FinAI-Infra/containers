@@ -1,0 +1,14 @@
+name: Build Cloud Cost Report
+
+on:
+  push:
+    paths:
+      - cloud-cost-report/**
+
+jobs:
+  docker:
+    uses: ./.github/workflows/docker-build.yml
+    with:
+      build_context: cloud-cost-report
+      image_name: fengheai/cloud-cost-report
+    secrets: inherit
