@@ -4,7 +4,7 @@ FROM ghcr.io/actions/actions-runner
 RUN set -e; \
     sudo apt-get update; \
     sudo apt-get upgrade -y; \
-    sudo apt-get install -y --no-install-recommends build-essential cmake rsync; \
+    sudo apt-get install -y --no-install-recommends build-essential cmake rsync zip; \
     curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash; \
     curl -sL https://aka.ms/downloadazcopy-v10-linux | sudo tar zxvf - -C /usr/local/bin --strip-components 1; \
     sudo apt-get clean; \
